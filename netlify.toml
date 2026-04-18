@@ -1,0 +1,12 @@
+# Netlify reads this from the repo root. The Next.js app lives in `frontend/`.
+# https://docs.netlify.com/build/configure-builds/file-based-configuration/
+
+[build]
+  base = "frontend"
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "22"

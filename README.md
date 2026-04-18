@@ -110,10 +110,12 @@ CORS is currently permissive (`*`) for local dev and split deployments.
 
 ## Deploying the frontend on Netlify
 
-Netlify can host this **Next.js** frontend like any static/SSR Next site:
+Netlify can host this **Next.js** frontend like any static/SSR Next site.
 
-1. Connect the repo and set the **base directory** to `frontend`.
-2. Build command: `npm run build`, publish directory: `.next` is handled by Netlify’s Next adapter if you use the official Netlify Next plugin; otherwise follow Netlify’s current Next.js docs for your chosen output mode.
+**Monorepo layout:** `package.json` is under `frontend/`, not the repo root. This repo includes a **root** `netlify.toml` with `[build] base = "frontend"` so Netlify runs `npm install` / `npm run build` in the right folder. If you previously set a custom build in the Netlify UI, either **remove** the UI build command / base directory overrides (so the file wins) or set **Base directory** to `frontend` manually and use `npm run build` there.
+
+1. Connect the Git repo (root = TwinMind monorepo).
+2. Rely on **`netlify.toml` at the repo root** (or set site **Base directory** to `frontend` and build command `npm run build` in the UI—do not leave base at repo root without one of these).
 3. Set **`NEXT_PUBLIC_BACKEND_URL`** in Netlify to the **public HTTPS URL** of your FastAPI deployment (e.g. Railway, Render, Fly.io, Azure, etc.). The browser calls that URL from the user’s machine.
 
 **Important:** Netlify does **not** run this repo’s Python FastAPI app by default. You still need a **separate** host for `backend` (or merge into a single platform that runs both). The UI only works end-to-end if that backend URL is reachable and allows browser CORS from your Netlify domain (you may need to tighten `allow_origins` in `main.py` for production).
