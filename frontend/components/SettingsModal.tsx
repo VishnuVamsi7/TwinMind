@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 export type TwinMindSettingsPayload = {
   apiKey: string;
@@ -34,7 +34,8 @@ export function SettingsModal({ isOpen, initial, onSave, onClose }: SettingsModa
   const [promptContinue, setPromptContinue] = useState(initial.systemPromptChatContinue);
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+    startTransition(() => {
       setApiKeyInput(initial.apiKey);
       setSuggestionCtxInput(String(initial.contextMinutesSuggestions));
       setChatCtxInput(String(initial.chatContextMinutes));
@@ -43,7 +44,7 @@ export function SettingsModal({ isOpen, initial, onSave, onClose }: SettingsModa
       setPromptExtended(initial.systemPromptExtended);
       setPromptExpand(initial.systemPromptChatExpand);
       setPromptContinue(initial.systemPromptChatContinue);
-    }
+    });
   }, [isOpen, initial]);
 
   if (!isOpen) {

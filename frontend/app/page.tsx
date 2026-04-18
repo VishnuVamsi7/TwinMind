@@ -42,13 +42,12 @@ function normalizeKind(raw: string): SuggestionKind {
 }
 
 function ClientLocalTime({ iso }: { iso: string }) {
-  const [label, setLabel] = useState("");
-
-  useEffect(() => {
-    setLabel(new Date(iso).toLocaleTimeString());
-  }, [iso]);
-
-  return <span>{label || "-"}</span>;
+  const label = Number.isNaN(new Date(iso).getTime()) ? "-" : new Date(iso).toLocaleTimeString();
+  return (
+    <span suppressHydrationWarning title={iso}>
+      {label}
+    </span>
+  );
 }
 
 function cloneBlobDeep(blob: Blob, mimeType: string): Promise<Blob> {
