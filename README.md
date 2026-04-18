@@ -112,7 +112,7 @@ CORS is currently permissive (`*`) for local dev and split deployments.
 
 Netlify can host this **Next.js** frontend like any static/SSR Next site.
 
-**Monorepo layout:** `package.json` is under `frontend/`, not the repo root. This repo includes a **root** `netlify.toml` with `[build] base = "frontend"` so Netlify runs `npm install` / `npm run build` in the right folder. If you previously set a custom build in the Netlify UI, either **remove** the UI build command / base directory overrides (so the file wins) or set **Base directory** to `frontend` manually and use `npm run build` there.
+**Monorepo layout:** `package.json` is under `frontend/`, not the repo root. The root **`netlify.toml`** sets `[build] base = "frontend"` and **`publish = ".next"`** (relative to `base`, so output is `frontend/.next`). That avoids `@netlify/plugin-nextjs` failing when publish would otherwise default to the **same path as base**. In the Netlify UI, do **not** set **Publish directory** to `frontend`; leave publish unset in the UI or match `.next` under the base. Prefer one source of truth: this file. If you previously set a custom build in the UI, remove conflicting **Base directory** / **Publish directory** / build command overrides so `netlify.toml` applies cleanly.
 
 1. Connect the Git repo (root = TwinMind monorepo).
 2. Rely on **`netlify.toml` at the repo root** (or set site **Base directory** to `frontend` and build command `npm run build` in the UI—do not leave base at repo root without one of these).
